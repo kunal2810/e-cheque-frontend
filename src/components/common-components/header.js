@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,75 +15,26 @@ import Avatar from '@material-ui/core/Avatar';
 // import HeaderStyle from '../../stylesheets/header'
 import cheque from '../../assets/cheque.jpg';
 import {Link} from "react-router-dom";
+import {AuthContext} from '../../service/contextApi';
+import Headercss from '../../stylesheets/headercss'
 
-const useStyles = makeStyles(theme => ({
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing(7),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-}));
 
-function Header() {
-  const classes = useStyles();
+
+function Header(props) {
+  const classes = Headercss.useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  
+  const { state, dispatch } = useContext(AuthContext);
+
+  console.log("dispatch", state)
+
+  useEffect(()=>{
+    console.log(props.headerName)
+  })
+
 
   const isMenuOpen = Boolean(anchorEl);
-  console.log('isMenuOpen',isMenuOpen);
+  
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -92,6 +43,12 @@ function Header() {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+      dispatch({
+        type: "LOGOUT"
+      }) 
+  }
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -106,7 +63,7 @@ function Header() {
     >
       <MenuItem><Link to="/issueCheque">Issue Cheque</Link></MenuItem>
       <MenuItem><Link to="/depositCheque">Deposit Cheque</Link></MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem><Link to="/" onClick={handleLogout}>Logout</Link></MenuItem>
     </Menu>
   );
 
@@ -134,11 +91,11 @@ function Header() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-          <IconButton aria-label="show 17 new notifications" color="inherit">
+          {/* <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={10} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -147,7 +104,7 @@ function Header() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar alt="Aindy Baker" src="/static/images/avatar/3.jpg" />
+              <Avatar alt={state.user} src="/static/images/avatar/3.jpg"/>
             </IconButton>
           </div>
           

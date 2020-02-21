@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Header from '../common-components/header';
 import Footer from '../common-components/footer';
 import OTPVerifyModal from './OTPVerify';
@@ -13,6 +13,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import {AuthContext} from '../../service/contextApi';
 
 export default function IssueCheque() {
 
@@ -20,6 +21,8 @@ export default function IssueCheque() {
   const [selectBank, setSelectBank] = useState('');
   const [modalShow, setModalShow] = useState(false);
   const [mobileNo, setMobileNo] = useState('');
+
+  const { state } = useContext(AuthContext);
 
 
   const handleSelectBank = event => {
@@ -45,6 +48,7 @@ export default function IssueCheque() {
     event.preventDefault();
     const formData = new FormData(event.target);
     let formobj = {
+      "payer_id" : state.id,
       "payeeName" : formData.get("payeeName"),
       "amtWords" : formData.get("amtWords"),
       "amtRs" : formData.get("amtRs"),

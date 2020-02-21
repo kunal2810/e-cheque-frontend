@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Header from '../common-components/header';
 import Footer from '../common-components/footer';
 import { Form, Col, Button } from 'react-bootstrap';
@@ -6,9 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import TextField from '@material-ui/core/TextField';
 import '../../stylesheets/depositCheque.css';
 import ApiCalling from '../../service/apicalling';
+import {AuthContext} from '../../service/contextApi';
 
 
 export default function DepositCheque() {
+
+    const { state } = useContext(AuthContext);
+
     const [chequeNo, setChequeNo] = useState('');
     const [formShow, setFormShow] = useState(false);
     const [data, setData] = useState({
@@ -43,7 +47,8 @@ export default function DepositCheque() {
     let handleDepositCheque = (event) => {
         event.preventDefault();
         let obj = {
-            chequeNo
+            chequeNo,
+            "payee_id" : state.id
         }
         ApiCalling.depositCheque(obj)
     }

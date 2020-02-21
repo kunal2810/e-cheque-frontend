@@ -1,19 +1,26 @@
 import React from "react";
 import '../../stylesheets/login.css';
 import {Link} from "react-router-dom";
+import ApiCalling from '../../service/apicalling';
 
 const Register = () => {
 
-    let handleLoginClick = (event) => {
+    let handleFormSubmit = (event) => {
         event.preventDefault();
-        console.log('click');
+        const formData = new FormData(event.target);
+        let formObj = {
+            "name" : formData.get("name"),
+            "email" : formData.get("email"),
+            "password" : formData.get("password")
+        }
+        ApiCalling.registerUser(formObj);
     }
 
     return (
         <div class="limiter">
             <div class="container-login100">
                 <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
-                    <form class="login100-form validate-form">
+                    <form onSubmit={handleFormSubmit} class="login100-form validate-form">
                         <span class="login100-form-title p-b-33">
                             Account Register
 					    </span>
@@ -44,9 +51,8 @@ const Register = () => {
                         <div class="container-login100-form-btn m-t-20">
                             <button
                                 class="login100-form-btn"
-                                onClick={handleLoginClick}
+                                type="submit"
                             >
-
                                 Register Now
 						</button>
                         </div>
